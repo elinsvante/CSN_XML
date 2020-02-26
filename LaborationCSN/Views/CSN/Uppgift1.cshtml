@@ -1,0 +1,95 @@
+﻿@using System.Xml.Linq
+@model XElement
+
+@{
+    ViewBag.Title = "Uppgift 1 - Utbetalningar per ärende";
+}
+
+<h2>Uppgift 1 - Utbetalningar per ärende</h2>
+
+
+<table table class="table-bordered table_50">
+    <thead>
+        <tr>
+            <th>
+                Ärendenummer
+            </th>
+            <th>
+                UtbetDatum
+            </th>
+            <th>
+                UtbetStatus
+            </th>
+            <th>
+                UtbetBelopp
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @*..detta är en kommentar..*@
+        @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
+
+        @foreach (var kurs in Model.Elements("Utbetalning"))
+        {
+            <tr>
+                <td>
+                    @((string)kurs.Element("Arendenummer"))
+                </td>
+                <td>
+                    @((string)kurs.Element("UtbetDatum"))
+                </td>
+                <td>
+                    @((string)kurs.Element("UtbetStatus"))
+                </td>
+                <td>
+                    @((string)kurs.Element("Belopp"))
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+<table table class="table-bordered table_50">
+    <thead>
+        <tr>
+            <th>
+                Ärendenummer
+            </th>
+            <th>
+                Totalbelopp
+            </th>
+            <th>
+                Utbetald Summa
+            </th>
+            <th>
+                Planerad Summa
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @*..detta är en kommentar..*@
+        @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
+
+
+        @foreach (var kurs in Model.DescendantsAndSelf("Arende"))
+        {
+            <tr>
+                <td>
+                    @((string)kurs.Attribute("Arende"))
+                </td>
+                <td>
+                    @((string)kurs.Element("Totalbelopp"))
+                </td>
+                <td>
+                    @((string)kurs.Element("PlaneradSumma"))
+                </td>
+                <td>
+                    @((string)kurs.Element("UtbetaldSumma"))
+                </td>
+            </tr>
+        }
+        </tbody>
+</table>
+
+
