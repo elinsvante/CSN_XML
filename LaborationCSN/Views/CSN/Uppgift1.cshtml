@@ -7,7 +7,6 @@
 
 <h2>Uppgift 1 - Utbetalningar per ärende</h2>
 
-
 <table table class="table-bordered table_50">
     <thead>
         <tr>
@@ -15,13 +14,13 @@
                 Ärendenummer
             </th>
             <th>
-                UtbetDatum
+                Datum
             </th>
             <th>
-                UtbetStatus
+                Status
             </th>
             <th>
-                UtbetBelopp
+                Summa
             </th>
         </tr>
     </thead>
@@ -42,54 +41,49 @@
                     @((string)kurs.Element("UtbetStatus"))
                 </td>
                 <td>
-                    @((string)kurs.Element("Belopp"))
+                    @((string)kurs.Element("Summa"))
                 </td>
             </tr>
         }
-
     </tbody>
 </table>
 
 <table table class="table-bordered table_50">
-    <thead>
-        <tr>
-            <th>
-                Ärendenummer
-            </th>
-            <th>
-                Totalbelopp
-            </th>
-            <th>
-                Utbetald Summa
-            </th>
-            <th>
-                Planerad Summa
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @*..detta är en kommentar..*@
-        @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
+<thead>
+    <tr>
+        <th>
+            Ärendenummer
+        </th>
+        <th>
+            Totalsumma:
+        </th>
+        <th>
+            Status:
+        </th>
+        <th>
+            Planerad summa:
+        </th>
+    </tr>
+</thead>
+<tbody>
 
+    @foreach (var utbet in Model.Elements("Utbetalning"))
+    {
+    <tr>
+        <td>
+            @((string)utbet.Element("Arendenummer"))
+        </td>
+        <td>
+            @((string)utbet.Element("Totalsumma"))
+        </td>
+        <td>
+            @((string)utbet.Element("UtbetStatus"))
+        </td>
+        <td>
+            @((string)utbet.Element("Totalbelopp"))
+        </td>
 
-        @foreach (var kurs in Model.DescendantsAndSelf("Arende"))
-        {
-            <tr>
-                <td>
-                    @((string)kurs.Attribute("Arende"))
-                </td>
-                <td>
-                    @((string)kurs.Element("Totalbelopp"))
-                </td>
-                <td>
-                    @((string)kurs.Element("PlaneradSumma"))
-                </td>
-                <td>
-                    @((string)kurs.Element("UtbetaldSumma"))
-                </td>
-            </tr>
-        }
-        </tbody>
+    </tr>
+    }
+</tbody>
 </table>
-
-

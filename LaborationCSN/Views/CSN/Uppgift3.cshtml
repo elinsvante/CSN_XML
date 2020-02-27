@@ -6,3 +6,45 @@
 }
 
 <h2>Uppgift 3 - Beviljade Tider</h2>
+
+<table table class="table-bordered table_50">
+    <thead>
+        <tr>
+            <th>
+                Starttid
+            </th>
+            <th>
+                Sluttid
+            </th>
+            <th>
+                Beskrivning
+            </th>
+            <th>
+                Summa
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @*..detta är en kommentar..*@
+        @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
+
+        @foreach (var kurs in Model.Elements("BeviljadTid"))
+        {
+        <tr>
+            <td>
+                @((string)kurs.Element("Starttid"))
+            </td>
+            <td>
+                @((string)kurs.Element("Sluttid"))
+            </td>
+            <td>
+                @((string)kurs.Element("Beskrivning"))
+            </td>
+            <td>
+                @((string)kurs.Element("Summa"))
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+

@@ -6,3 +6,46 @@
 }
 
 <h2>Uppgift 2 - Utbetalningar och bidragstyper</h2>
+
+
+<table table class="table-bordered table_50">
+    <thead>
+        <tr>
+            <th>
+                Utbetdatum
+            </th>
+            <th>
+                Summa
+            </th>
+            <th>
+            Utbetalningar
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @*..detta är en kommentar..*@
+        @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
+
+        @foreach (var utbet in Model.Elements("Utbetalning"))
+        {
+            <tr>
+                <td>
+                    @((string)utbet.Element("UtbetDatum"))
+                </td>
+                <td>
+                    @((string)utbet.Element("Summa"))
+                </td>
+                <td>
+                    <table table class="table-bordered table_100" style="table-layout:fixed">
+                        <tbody>
+                            <tr>
+                                <td>@((string)utbet.Element("Beskrivning"))</td>
+                                <td>@((string)utbet.Element("Belopp"))</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -70,56 +70,17 @@ namespace LaborationCSN.Controllers
 
         public ActionResult Uppgift1()
         {
-            string query1 = @"SELECT a.Arendenummer, UtbetDatum, UtbetStatus, b.Belopp
+            string query1 = @"SELECT DISTINCT a.Arendenummer, UtbetDatum, UtbetStatus, SUM((ut.Sluttid-ut.Starttid + 1) * b.belopp) OVER (PARTITION BY UtbetDatum, a.Arendenummer ORDER BY a.Arendenummer) AS Summa, SUM((ut.Sluttid-ut.Starttid + 1) * b.belopp) OVER (PARTITION BY u.UtbetStatus, a.Arendenummer ORDER BY a.Arendenummer) AS Totalbelopp,SUM((ut.Sluttid-ut.Starttid + 1) * b.belopp) OVER (PARTITION BY a.Arendenummer ORDER BY a.Arendenummer) AS Totalsumma			
                             FROM Utbetalning u, Utbetalningsplan up, Arende a, UtbetaldTid ut, UtbetaldTid_Belopp utb, Belopp b
                             WHERE a.Arendenummer = up.Arendenummer
                             AND u.UtbetPlanID = up.UtbetPlanID
                             AND u.UtbetID = ut.UtbetID
                             AND ut.UtbetTidID = utb.UtbetaldTidID
                             AND utb.BeloppID = b.BeloppID
-                            ORDER BY a.Arendenummer";
-
+                            order by a.Arendenummer";
 
 
             XElement arendenUtbet = SQLResult(query1, "AllaÄrendenUtbetalningar", "Utbetalning");
-
-            XElement summaArenden =
-                new XElement("SummaUtbet",
-                    new XElement("Arende", new XAttribute("Arende", 14), 
-                        new XElement("Totalbelopp", (from utbet in arendenUtbet.Descendants("Utbetalning")
-                                                     where (int)utbet.Element("Arendenummer") == 14
-                                                     select (int)utbet.Element("Belopp")).Sum()),
-                        new XElement("PlaneradSumma", (from utbet in arendenUtbet.Descendants("Utbetalning")
-                                                   where (int)utbet.Element("Arendenummer") == 14 && (string)utbet.Element("UtbetStatus") == "Planerad"
-                                                   select (int)utbet.Element("Belopp")).Sum()),
-                        new XElement("UtbetaldSumma", (from utbet in arendenUtbet.Descendants("Utbetalning")
-                                                   where (int)utbet.Element("Arendenummer") == 14 && (string)utbet.Element("UtbetStatus") == "Utbetald"
-                                                   select (int)utbet.Element("Belopp")).Sum())),
-
-                new XElement("Arende", new XAttribute("Arende", 15),
-                  new XElement("Totalbelopp", (from utbet in arendenUtbet.Descendants("Utbetalning")
-                                               where (int)utbet.Element("Arendenummer") == 15
-                                               select (int)utbet.Element("Belopp")).Sum()),
-                  new XElement("PlaneradSumma", (from utbet in arendenUtbet.Descendants("Utbetalning")
-                                                 where (int)utbet.Element("Arendenummer") == 15 && (string)utbet.Element("UtbetStatus") == "Planerad"
-                                                 select (int)utbet.Element("Belopp")).Sum()),
-                  new XElement("UtbetaldSumma", (from utbet in arendenUtbet.Descendants("Utbetalning")
-                                                 where (int)utbet.Element("Arendenummer") == 15 && (string)utbet.Element("UtbetStatus") == "Utbetald"
-                                                 select (int)utbet.Element("Belopp")).Sum())),
-
-              new XElement("Arende", new XAttribute("Arende", 16),
-                  new XElement("Totalbelopp", (from utbet in arendenUtbet.Descendants("Utbetalning")
-                                               where (int)utbet.Element("Arendenummer") == 16
-                                               select (int)utbet.Element("Belopp")).Sum()),
-                  new XElement("PlaneradSumma", (from utbet in arendenUtbet.Descendants("Utbetalning")
-                                                 where (int)utbet.Element("Arendenummer") == 16 && (string)utbet.Element("UtbetStatus") == "Planerad"
-                                                 select (int)utbet.Element("Belopp")).Sum()),
-                  new XElement("UtbetaldSumma", (from utbet in arendenUtbet.Descendants("Utbetalning")
-                                                 where (int)utbet.Element("Arendenummer") == 16 && (string)utbet.Element("UtbetStatus") == "Utbetald"
-                                                 select (int)utbet.Element("Belopp")).Sum())));
-
-
-            arendenUtbet.Add(summaArenden);
 
             return View(arendenUtbet);
         }
@@ -130,7 +91,20 @@ namespace LaborationCSN.Controllers
 
         public ActionResult Uppgift2()
         {
-            return View();
+            string query2 = @"SELECT u.UtbetDatum, btk.Beskrivning, SUM((ut.Sluttid-ut.Starttid + 1) * b.belopp) AS Belopp, SUM((ut.Sluttid-ut.Starttid + 1) * b.belopp) OVER (PARTITION BY UtbetDatum) AS Summa
+                            FROM Arende a, Utbetalningsplan up, Utbetalning u, UtbetaldTid ut, UtbetaldTid_Belopp utb, Belopp b, Beloppstyp btk
+                            WHERE a.Arendenummer = up.Arendenummer
+                            AND u.UtbetPlanID = up.UtbetPlanID
+                            AND u.UtbetID = ut.UtbetID
+                            AND ut.UtbetTidID = utb.UtbetaldTidID
+                            AND utb.BeloppID = b.beloppID
+                            AND b.Beloppstypkod = btk.Beloppstypkod
+                            AND u.UtbetStatus = 'Utbetald'
+                            GROUP BY u.UtbetDatum, btk.Beskrivning";
+
+            XElement utbetPerDatum = SQLResult(query2, "UtbetPerDatum", "Utbetalning");
+
+            return View(utbetPerDatum);
         }
 
         //
@@ -138,7 +112,17 @@ namespace LaborationCSN.Controllers
 
         public ActionResult Uppgift3()
         {
-            return View();
+            string query3 = @"SELECT DISTINCT Starttid, Sluttid, s.Beskrivning, SUM(((Sluttid-Starttid +1) * b.Belopp)) as Summa
+                            FROM BeviljadTid bt, BeviljadTid_Belopp btb, Belopp b, Arende a, Stodform s
+                            WHERE btb.BeviljadTidID = bt.BeviljadTidID 
+                            AND btb.BeloppID = b.BeloppID
+                            AND bt.Arendenummer = a.Arendenummer
+                            AND a.Stodformskod = s.Stodformskod
+                            GROUP BY Starttid, Sluttid, Beskrivning
+                            ORDER BY Beskrivning";
+
+            XElement beviljadeTider = SQLResult(query3, "BeviljadeTider", "BeviljadTid");
+            return View(beviljadeTider);
         }
     }
 }
