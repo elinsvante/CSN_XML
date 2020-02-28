@@ -25,23 +25,26 @@
     <tbody>
         @*..detta är en kommentar..*@
         @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
-
-        @foreach (var utbet in Model.Elements("Utbetalning"))
+        @foreach (var utbet1 in Model.Descendants("Datum"))
         {
             <tr>
                 <td>
-                    @((string)utbet.Element("UtbetDatum"))
+                    @((string)utbet1.Element("UtbetDatum"))
                 </td>
                 <td>
-                    @((string)utbet.Element("Summa"))
+                    @((string)utbet1.Element("TotalBelopp"))
                 </td>
                 <td>
+
                     <table table class="table-bordered table_100" style="table-layout:fixed">
                         <tbody>
-                            <tr>
-                                <td>@((string)utbet.Element("Beskrivning"))</td>
-                                <td>@((string)utbet.Element("Belopp"))</td>
-                            </tr>
+                            @foreach (var utbet2 in utbet1.Elements("Utbetalning"))
+                            {
+                                <tr>
+                                    <td>@((string)utbet2.Element("Beskrivning"))</td>
+                                    <td>@((string)utbet2.Element("Belopp"))</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </td>

@@ -5,14 +5,12 @@
     ViewBag.Title = "Uppgift 1 - Utbetalningar per ärende";
 }
 
-<h2>Uppgift 1 - Utbetalningar per ärende</h2>
+<h2>Uppgift 1 - Utbetalningar per ärende</h2><br />
 
+<h2>Ärende 14</h2>
 <table table class="table-bordered table_50">
     <thead>
         <tr>
-            <th>
-                Ärendenummer
-            </th>
             <th>
                 Datum
             </th>
@@ -30,60 +28,109 @@
 
         @foreach (var kurs in Model.Elements("Utbetalning"))
         {
-            <tr>
-                <td>
-                    @((string)kurs.Element("Arendenummer"))
-                </td>
-                <td>
-                    @((string)kurs.Element("UtbetDatum"))
-                </td>
-                <td>
-                    @((string)kurs.Element("UtbetStatus"))
-                </td>
-                <td>
-                    @((string)kurs.Element("Summa"))
-                </td>
-            </tr>
+            if ((string)kurs.Element("Arendenummer") == "14")
+            {
+                <tr>
+                    <td>
+                        @((string)kurs.Element("UtbetDatum"))
+                    </td>
+                    <td>
+                        @((string)kurs.Element("UtbetStatus"))
+                    </td>
+                    <td>
+                        @((string)kurs.Element("Summa"))
+                    </td>
+                </tr>
+            }
         }
+        <tr><td>Total Summa:</td><td>@((string)Model.Element("ArendeFjorton").Element("TotalSumma").Value)</td></tr>
+        <tr><td>Utbetald Summa:</td><td>@((string)Model.Element("ArendeFjorton").Element("UtbetaldSumma").Value)</td></tr>
+        <tr><td>Planerad Summa:</td><td> @((string)Model.Element("ArendeFjorton").Element("PlaneradSumma").Value)</td></tr>
     </tbody>
 </table>
+<br /><br />
 
+<h2>Ärende 15</h2>
 <table table class="table-bordered table_50">
-<thead>
-    <tr>
-        <th>
-            Ärendenummer
-        </th>
-        <th>
-            Totalsumma:
-        </th>
-        <th>
-            Status:
-        </th>
-        <th>
-            Planerad summa:
-        </th>
-    </tr>
-</thead>
-<tbody>
+    <thead>
+        <tr>
+            <th>
+                Datum
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Summa
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @*..detta är en kommentar..*@
+        @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
 
-    @foreach (var utbet in Model.Elements("Utbetalning"))
-    {
-    <tr>
-        <td>
-            @((string)utbet.Element("Arendenummer"))
-        </td>
-        <td>
-            @((string)utbet.Element("Totalsumma"))
-        </td>
-        <td>
-            @((string)utbet.Element("UtbetStatus"))
-        </td>
-        <td>
-            @((string)utbet.Element("Totalbelopp"))
-        </td>
+        @foreach (var kurs in Model.Elements("Utbetalning"))
+        {
+            if ((string)kurs.Element("Arendenummer") == "15")
+            {
+                <tr>
+                    <td>
+                        @((string)kurs.Element("UtbetDatum"))
+                    </td>
+                    <td>
+                        @((string)kurs.Element("UtbetStatus"))
+                    </td>
+                    <td>
+                        @((string)kurs.Element("Summa"))
+                    </td>
+                </tr>
+            }
+        }
+        <tr><td>Total Summa:</td><td>@((string)Model.Element("ArendeFemton").Element("TotalSumma").Value)</td></tr>
+        <tr><td>Utbetald Summa:</td><td>@((string)Model.Element("ArendeFemton").Element("UtbetaldSumma").Value)</td></tr>
+        <tr><td>Planerad Summa:</td><td> @((string)Model.Element("ArendeFemton").Element("PlaneradSumma").Value)</td></tr>
+    </tbody>
+</table>
+<br /></br>
 
-    </tr>
-    }
-</tbody>
+<h2>Ärende 16</h2>
+<table table class="table-bordered table_50">
+    <thead>
+        <tr>
+            <th>
+                Datum
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Summa
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @*..detta är en kommentar..*@
+        @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
+
+        @foreach (var kurs in Model.Elements("Utbetalning"))
+        {
+            if ((string)kurs.Element("Arendenummer") == "16")
+            {
+                <tr>
+                    <td>
+                        @((string)kurs.Element("UtbetDatum"))
+                    </td>
+                    <td>
+                        @((string)kurs.Element("UtbetStatus"))
+                    </td>
+                    <td>
+                        @((string)kurs.Element("Summa"))
+                    </td>
+                </tr>
+            }
+        }
+        <tr><td>Total Summa:</td><td>@((string)Model.Element("ArendeSexton").Element("TotalSumma").Value)</td></tr>
+        <tr><td>Utbetald Summa:</td><td>@((string)Model.Element("ArendeSexton").Element("UtbetaldSumma").Value)</td></tr>
+        <tr><td>Planerad Summa:</td><td> @((string)Model.Element("ArendeSexton").Element("PlaneradSumma").Value)</td></tr>
+    </tbody>
 </table>
