@@ -75,54 +75,34 @@ namespace LaborationCSN.Controllers
                             WHERE a.Arendenummer = up.Arendenummer
                             AND u.UtbetPlanID = up.UtbetPlanID AND u.UtbetID = ut.UtbetID AND ut.UtbetTidID = utb.UtbetaldTidID AND utb.BeloppID = b.BeloppID
                             order by a.Arendenummer";
-
-
+         
+       
             XElement arendenUtbet = SQLResult(query1, "AllaÄrendenUtbetalningar", "Utbetalning");
-            XElement summaArendeFjorton =
-                new XElement("ArendeFjorton",
-                    new XElement("TotalSumma", getSum(14, arendenUtbet)),
-                    new XElement("UtbetaldSumma", getPaidOut(14, arendenUtbet)),
-                    new XElement("PlaneradSumma", getPlannedSum(14, arendenUtbet)));
+            XElement nyArendenUtbet = new XElement("AllaÄrendenUtbetalningar");
+            var allArenden = (from s in arendenUtbet.Descendants("Arendenummer")
+                        select s.Value).Distinct();
 
+            foreach (var node in allArenden)
+            {
+                XElement arenden = new XElement("Ärende", new XAttribute("ID", node),
+                    new XElement("Totalsumma", (from b in arendenUtbet.Elements("Utbetalning")
+                                                where (string)b.Element("Arendenummer") == node
+                                                select (int)b.Element("Summa")).Sum()),
+                    new XElement("Utbetalt", (from b in arendenUtbet.Elements("Utbetalning")
+                                              where (string)b.Element("Arendenummer") == node &&
+                                              (string)b.Element("UtbetStatus") == "Utbetald"
+                                              select (int)b.Element("Summa")).Sum()),
+                    new XElement("Planerat", (from b in arendenUtbet.Elements("Utbetalning")
+                                              where (string)b.Element("Arendenummer") == node &&
+                                              (string)b.Element("UtbetStatus") == "Planerad"
+                                              select (int)b.Element("Summa")).Sum()),
+                    new XElement("Utbetalningar", from b in arendenUtbet.Descendants("Utbetalning")
+                                               .Where(x => (string)x.Element("Arendenummer") == node)
+                                                select b));
+                nyArendenUtbet.Add(arenden);
+            }
 
-            XElement summaArendeFemton =
-                new XElement("ArendeFemton",
-                    new XElement("TotalSumma", getSum(15, arendenUtbet)),
-                    new XElement("UtbetaldSumma", getPaidOut(15, arendenUtbet)),
-                    new XElement("PlaneradSumma", getPlannedSum(15, arendenUtbet)));
-
-            XElement summaArendeSexton =
-              new XElement("ArendeSexton",
-                  new XElement("TotalSumma", getSum(16, arendenUtbet)),
-                  new XElement("UtbetaldSumma", getPaidOut(16, arendenUtbet)),
-                  new XElement("PlaneradSumma", getPlannedSum(16, arendenUtbet)));
-
-            arendenUtbet.Add(summaArendeFjorton, summaArendeFemton, summaArendeSexton);
-            return View(arendenUtbet);
-        }
-
-
-        public int getSum(int arende, XElement arendenUtbet)
-        {
-            return (from b in arendenUtbet.Elements("Utbetalning")
-             where (int)b.Element("Arendenummer") == arende
-             select (int)b.Element("Summa")).Sum();
-        }
-
-        public int getPaidOut(int arende, XElement arendenUtbet)
-        {
-            return (from b in arendenUtbet.Elements("Utbetalning")
-             where (int)b.Element("Arendenummer") == arende &&
-             (string)b.Element("UtbetStatus") == "Utbetald"
-             select (int)b.Element("Summa")).Sum();
-        }
-
-        public int getPlannedSum(int arende, XElement arendenUtbet)
-        {
-            return (from b in arendenUtbet.Elements("Utbetalning")
-                     where (int)b.Element("Arendenummer") == arende &&
-                     (string)b.Element("UtbetStatus") == "Planerad"
-                     select (int)b.Element("Summa")).Sum();
+            return View(nyArendenUtbet);
         }
 
 
@@ -138,24 +118,25 @@ namespace LaborationCSN.Controllers
                             AND utb.BeloppID = b.beloppID AND b.Beloppstypkod = btk.Beloppstypkod AND u.UtbetStatus = 'Utbetald'
                             GROUP BY u.UtbetDatum, btk.Beskrivning";
 
-            string query2_1 = @"SELECT u.UtbetDatum, SUM((ut.Sluttid-ut.Starttid + 1) * b.belopp) AS TotalBelopp
-                              FROM Arende a, Utbetalningsplan up, Utbetalning u, UtbetaldTid ut, UtbetaldTid_Belopp utb, Belopp b, Beloppstyp btk
-                              WHERE a.Arendenummer = up.Arendenummer
-                              AND u.UtbetPlanID = up.UtbetPlanID AND u.UtbetID = ut.UtbetID AND ut.UtbetTidID = utb.UtbetaldTidID
-                              AND utb.BeloppID = b.beloppID AND b.Beloppstypkod = btk.Beloppstypkod AND u.UtbetStatus = 'Utbetald'
-                              GROUP BY u.UtbetDatum";
-
+       
             XElement allaUtbet = SQLResult(query2, "UtbetPerDatum", "Utbetalning");
-            XElement utbetPerDatum = SQLResult(query2_1, "UtbetPerDatum", "Datum");
+            XElement nyAllaUtbet = new XElement("AllaUtbetalningar");
+            var allaUtbetDatum = (from s in allaUtbet.Descendants("UtbetDatum")
+                                 select s.Value).Distinct();
 
-            foreach(var node in utbetPerDatum.Descendants("Datum"))
+            foreach (var node in allaUtbetDatum)
             {
-                node.Add(from b in allaUtbet.Elements("Utbetalning")
-                         where (b.Element("UtbetDatum")).Value == (node.Element("UtbetDatum")).Value
-                         select b);
-            } 
+                XElement utbetalning = new XElement("UtbetDatum", new XAttribute("Datum", node),
+                    new XElement("Totalsumma", (from b in allaUtbet.Elements("Utbetalning")
+                                                where (string)b.Element("UtbetDatum") == node
+                                                select (int)b.Element("Belopp")).Sum()), 
+                    new XElement("Utbetalningar", from b in allaUtbet.Descendants("Utbetalning")
+                                                 .Where(x => (string)x.Element("UtbetDatum") == node)
+                                                  select b));
+                nyAllaUtbet.Add(utbetalning);
+            }
 
-            return View(utbetPerDatum);
+            return View(nyAllaUtbet);
         }
 
         //

@@ -26,26 +26,36 @@
         @*..detta är en kommentar..*@
         @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
 
-        @foreach (var kurs in Model.Elements("Utbetalning"))
+        @foreach (var arende in Model.Elements("Ärende"))
         {
-            if ((string)kurs.Element("Arendenummer") == "14")
+            if ((string)arende.Attribute("ID").Value == "14")
             {
-                <tr>
-                    <td>
-                        @((string)kurs.Element("UtbetDatum"))
-                    </td>
-                    <td>
-                        @((string)kurs.Element("UtbetStatus"))
-                    </td>
-                    <td>
-                        @((string)kurs.Element("Summa"))
-                    </td>
-                </tr>
+                foreach (var utbetalning in arende.Elements("Utbetalningar").Elements("Utbetalning"))
+                {
+                    <tr>
+                        <td>
+                            @((string)utbetalning.Element("UtbetDatum"))
+                        </td>
+
+
+                        <td>
+                            @((string)utbetalning.Element("UtbetStatus"))
+                        </td>
+
+
+                        <td>
+                            @((string)utbetalning.Element("Summa"))
+                        </td>
+
+
+                    </tr>
+                }
+                <tr><td>Total Summa:</td><td>@((string)arende.Element("Totalsumma"))</td></tr>
+                <tr><td>Utbetald Summa:</td><td>@((string)arende.Element("Utbetalt"))</td></tr>
+                <tr><td>Planerad Summa:</td><td> @((string)arende.Element("Planerat"))</td></tr>
             }
         }
-        <tr><td>Total Summa:</td><td>@((string)Model.Element("ArendeFjorton").Element("TotalSumma").Value)</td></tr>
-        <tr><td>Utbetald Summa:</td><td>@((string)Model.Element("ArendeFjorton").Element("UtbetaldSumma").Value)</td></tr>
-        <tr><td>Planerad Summa:</td><td> @((string)Model.Element("ArendeFjorton").Element("PlaneradSumma").Value)</td></tr>
+
     </tbody>
 </table>
 <br /><br />
@@ -69,26 +79,30 @@
         @*..detta är en kommentar..*@
         @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
 
-        @foreach (var kurs in Model.Elements("Utbetalning"))
+        @foreach (var arende in Model.Elements("Ärende"))
         {
-            if ((string)kurs.Element("Arendenummer") == "15")
+            if ((string)arende.Attribute("ID").Value == "15")
             {
-                <tr>
-                    <td>
-                        @((string)kurs.Element("UtbetDatum"))
-                    </td>
-                    <td>
-                        @((string)kurs.Element("UtbetStatus"))
-                    </td>
-                    <td>
-                        @((string)kurs.Element("Summa"))
-                    </td>
-                </tr>
+                foreach (var utbetalning in arende.Elements("Utbetalningar").Elements("Utbetalning"))
+                {
+                    <tr>
+                        <td>
+                            @((string)utbetalning.Element("UtbetDatum"))
+                        </td>
+                        <td>
+                            @((string)utbetalning.Element("UtbetStatus"))
+                        </td>
+                        <td>
+                            @((string)utbetalning.Element("Summa"))
+                        </td>
+                    </tr>
+                }
+                <tr><td>Total Summa:</td><td>@((string)arende.Element("Totalsumma").Value)</td></tr>
+                <tr><td>Utbetald Summa:</td><td>@((string)arende.Element("Utbetalt").Value)</td></tr>
+                <tr><td>Planerad Summa:</td><td> @((string)arende.Element("Planerat").Value)</td></tr>
             }
         }
-        <tr><td>Total Summa:</td><td>@((string)Model.Element("ArendeFemton").Element("TotalSumma").Value)</td></tr>
-        <tr><td>Utbetald Summa:</td><td>@((string)Model.Element("ArendeFemton").Element("UtbetaldSumma").Value)</td></tr>
-        <tr><td>Planerad Summa:</td><td> @((string)Model.Element("ArendeFemton").Element("PlaneradSumma").Value)</td></tr>
+
     </tbody>
 </table>
 <br /></br>
@@ -112,25 +126,29 @@
         @*..detta är en kommentar..*@
         @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
 
-        @foreach (var kurs in Model.Elements("Utbetalning"))
+        @foreach (var arende in Model.Elements("Ärende"))
         {
-            if ((string)kurs.Element("Arendenummer") == "16")
+            if ((string)arende.Attribute("ID").Value == "16")
             {
-                <tr>
-                    <td>
-                        @((string)kurs.Element("UtbetDatum"))
-                    </td>
-                    <td>
-                        @((string)kurs.Element("UtbetStatus"))
-                    </td>
-                    <td>
-                        @((string)kurs.Element("Summa"))
-                    </td>
-                </tr>
+                foreach (var utbetalning in arende.Elements("Utbetalningar").Elements("Utbetalning"))
+                {
+                    <tr>
+                        <td>
+                            @((string)utbetalning.Element("UtbetDatum"))
+                        </td>
+                        <td>
+                            @((string)utbetalning.Element("UtbetStatus"))
+                        </td>
+                        <td>
+                            @((string)utbetalning.Element("Summa"))
+                        </td>
+                    </tr>
+                }
+                <tr><td>Total Summa:</td><td>@((string)arende.Element("Totalsumma").Value)</td></tr>
+                <tr><td>Utbetald Summa:</td><td>@((string)arende.Element("Utbetalt").Value)</td></tr>
+                <tr><td>Planerad Summa:</td><td> @((string)arende.Element("Planerat").Value)</td></tr>
             }
         }
-        <tr><td>Total Summa:</td><td>@((string)Model.Element("ArendeSexton").Element("TotalSumma").Value)</td></tr>
-        <tr><td>Utbetald Summa:</td><td>@((string)Model.Element("ArendeSexton").Element("UtbetaldSumma").Value)</td></tr>
-        <tr><td>Planerad Summa:</td><td> @((string)Model.Element("ArendeSexton").Element("PlaneradSumma").Value)</td></tr>
+
     </tbody>
 </table>
