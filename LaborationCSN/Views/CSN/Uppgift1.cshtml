@@ -26,9 +26,9 @@
         @*..detta är en kommentar..*@
         @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
 
-        @foreach (var arende in Model.Elements("Ärende"))
+        @foreach (var arende in Model.Elements("Arende"))
         {
-            if ((string)arende.Attribute("ID").Value == "14")
+            if ((int)arende.Element("Arendenummer") == 14)
             {
                 foreach (var utbetalning in arende.Elements("Utbetalningar").Elements("Utbetalning"))
                 {
@@ -79,9 +79,9 @@
         @*..detta är en kommentar..*@
         @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
 
-        @foreach (var arende in Model.Elements("Ärende"))
+        @foreach (var arende in Model.Elements("Arende"))
         {
-            if ((string)arende.Attribute("ID").Value == "15")
+            if ((int)arende.Element("Arendenummer") == 15)
             {
                 foreach (var utbetalning in arende.Elements("Utbetalningar").Elements("Utbetalning"))
                 {
@@ -126,9 +126,9 @@
         @*..detta är en kommentar..*@
         @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
 
-        @foreach (var arende in Model.Elements("Ärende"))
+        @foreach (var arende in Model.Elements("Arende"))
         {
-            if ((string)arende.Attribute("ID").Value == "16")
+            if ((int)arende.Element("Arendenummer") == 16)
             {
                 foreach (var utbetalning in arende.Elements("Utbetalningar").Elements("Utbetalning"))
                 {

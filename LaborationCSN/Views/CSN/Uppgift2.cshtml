@@ -25,11 +25,11 @@
     <tbody>
         @*..detta är en kommentar..*@
         @*iterera igenom alla <BeviljadTid> noder i Model som håller vår xml*@
-        @foreach (var utbet1 in Model.Elements("UtbetDatum"))
+        @foreach (var utbet1 in Model.Elements("Datum"))
         {
             <tr>
                 <td>
-                    @((string)utbet1.Attribute("Datum"))
+                    @((string)utbet1.Element("UtbetDatum"))
                 </td>
                 <td>
                     @((string)utbet1.Element("Totalsumma"))
